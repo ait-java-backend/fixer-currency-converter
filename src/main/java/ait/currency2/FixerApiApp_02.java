@@ -1,6 +1,5 @@
-package ait.currency;
+package ait.currency2;
 
-import ait.currency.dto.FixerResponseDto;
 import ait.currency2.dto.ConvertResponseDto;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.RequestEntity;
@@ -9,10 +8,9 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
-import java.util.Map;
 import java.util.Scanner;
 
-public class FixerApiApp {
+public class FixerApiApp_02 {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
