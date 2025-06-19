@@ -1,7 +1,6 @@
-package ait.currency;
+package ait.currency2;
 
 import ait.currency.dto.FixerResponseDto;
-import ait.currency2.dto.ConvertResponseDto;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
@@ -29,23 +28,23 @@ public class FixerApiApp {
         RestTemplate restTemplate = new RestTemplate();
 
         UriComponentsBuilder builder = UriComponentsBuilder
-                .fromHttpUrl("http://data.fixer.io/api/convert")
+                .fromHttpUrl("http://data.fixer.io/api/latest")
                 .queryParam("access_key", accessKey)
-                .queryParam("from", from)
-                .queryParam("to", to)
-                .queryParam("amount", amount);
+                .queryParam("symbols", from + "," + to);
 
         URI url = builder.build().toUri();
 
         RequestEntity<Void> request = new RequestEntity<>(HttpMethod.GET, url);
-        ResponseEntity<ConvertResponseDto> response = restTemplate.exchange(request, ConvertResponseDto.class);
+        ResponseEntity<FixerResponseDto> response = restTemplate.exchange(request, FixerResponseDto.class);
 
-        ConvertResponseDto data = response.getBody();
+        FixerResponseDto fixer = response.getBody();
 
-        System.out.printf("%.2f %s = %.2f %s%n",
-                data.getQuery().getAmount(),
-                data.getQuery().getFrom(),
-                data.getResult(),
-                data.getQuery().getTo());
+        Map<String, Double> rates = fixer.getRates();
+
+        double rateFrom = rates.get(from);
+        double rateTo = rates.get(to);
+        double result = amount * (rateTo / rateFrom);
+
+        System.out.printf("%.2f %s = %.2f %s%n", amount, from, result, to);
     }
 }
